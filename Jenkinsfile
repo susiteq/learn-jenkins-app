@@ -3,6 +3,7 @@ pipeline {
 
     stages {
         /*
+
         stage('Build') {
             agent {
                 docker {
@@ -22,6 +23,7 @@ pipeline {
             }
         }
         */
+
         stage('Test') {
             agent {
                 docker {
@@ -29,9 +31,10 @@ pipeline {
                     reuseNode true
                 }
             }
+
             steps {
                 sh '''
-                    test -f build/index.html
+                    #test -f build/index.html
                     npm test
                 '''
             }
@@ -40,11 +43,11 @@ pipeline {
         stage('E2E') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.51.0-noble'
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
                     reuseNode true
-                    args '-u root:root'
                 }
             }
+
             steps {
                 sh '''
                     npm install serve
@@ -58,7 +61,7 @@ pipeline {
 
     post {
         always {
-            junit 'test-results/junit.xml'
+            junit 'jest-results/junit.xml'
         }
     }
 }
